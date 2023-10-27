@@ -19,7 +19,7 @@ std::vector<std::string> parseCSVLine(const std::string& line) {
     return result;
 }
 
-int main() {
+int main(int argc, char **argv) {
     using Point = std::array<double, 2>;
 
     std::string coords_name = "../Provided_files/coords.txt";
@@ -101,7 +101,16 @@ int main() {
     // part 1
     rtree tree(leaf_node);
 
-    std::cout << tree.print_tree();
+    std::string rtree_name = "../Provided_files/Rtree.txt";
+    std::ofstream rtrees(rtree_name);
+    if (!rtrees) {
+        std::cerr << "Failed to open file: " << rtree_name << std::endl;
+        return 1;
+    }
+    std::string print_tree = tree.print_tree();
+    rtrees.write(print_tree.c_str(), print_tree.size());
+
+    rtrees.close();
 
     // part 2
     std::string rquery_name = "../Provided_files/Rqueries.txt";

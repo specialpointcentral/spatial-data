@@ -9,6 +9,7 @@
 
 constexpr std::size_t capacity = 20;
 constexpr std::size_t low_water = 8;
+constexpr std::size_t node_cap = capacity;
 
 struct rtree
 {
@@ -27,41 +28,40 @@ struct rtree
         std::size_t level_node_size = nodes.size();
         std::size_t level = 0;
         // copy each node
-        for (std::size_t i = 0; i < level_node_size; i = i + low_water)
+        for (std::size_t i = 0; i < level_node_size; i = i + node_cap)
         {
             node *tile = (node *)malloc(sizeof(node) * capacity);
             // copy each node
             for (std::size_t j = 0; j < capacity; ++j)
             {
-                if (j < low_water && i + j < level_node_size)
+                if (j < node_cap && i + j < level_node_size)
                     tile[j] = nodes[i + j];
                 else
                     tile[j].set_invalid();
             }
             level_node.push(tile);
         }
-        std::cout << level_node_size << " node(s) at level " << level << std::endl;
         // build the root
         while (++level)
         {   
             // check if it is root
             level_node_size = level_node.size();
-            std::cout << level_node_size << " node(s) at level " << level << std::endl;
+            std::cout << level_node_size << " node(s) at level " << level - 1 << std::endl;
             if (level_node_size == 1)
             {
                 _root = level_node.front();
                 break;
             }
             // build tree in each level
-            for (std::size_t i = 0; i < level_node_size; i = i + low_water)
+            for (std::size_t i = 0; i < level_node_size; i = i + node_cap)
             {
                 node *tile = (node *)malloc(sizeof(node) * capacity);
                 // set each node
                 for (std::size_t j = 0; j < capacity; ++j)
                 {
-                    if (j < low_water && i + j < level_node_size)
+                    if (j < node_cap && i + j < level_node_size)
                     {
-                        tile[j].set_root(level_node.front(), low_water);
+                        tile[j].set_root(level_node.front(), node_cap);
                         level_node.pop();
                     }
                     else
