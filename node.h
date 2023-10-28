@@ -1,19 +1,17 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 #include "mbr.h"
-#include <string>
-#include <cstdint>
 #include <cmath>
+#include <cstdint>
+#include <string>
 
-enum Node_type
-{
+enum Node_type {
     leaf,
     root,
     invd,
 };
 
-struct node
-{
+struct node {
     using Point = std::array<double, 2>;
 
     node() {}
@@ -29,13 +27,16 @@ struct node
         _mbr.set_mbr(ps);
     }
 
-    void set_invalid() {
+    void set_invalid()
+    {
         _type = invd;
     }
-    bool is_valid() {
+    bool is_valid()
+    {
         return _type != invd;
     }
-    bool is_leaf() {
+    bool is_leaf()
+    {
         return _type == leaf;
     }
 
@@ -49,16 +50,20 @@ struct node
     {
         node *__node = (node *)node_ptr;
         std::vector<Point> ps;
-        for (int i = 0; i < n; ++i)
-        {
-            if (__node[i].is_valid())
-            {
+        for (int i = 0; i < n; ++i) {
+            if (__node[i].is_valid()) {
                 ps.push_back(__node[i]._mbr.get_xy_low());
                 ps.push_back(__node[i]._mbr.get_xy_high());
             }
         }
         mbr __mbr(ps);
         set_root(node_ptr, __mbr);
+    }
+    void set_leaf(int id, mbr &node_mbr)
+    {
+        _type = leaf;
+        _id = id;
+        _mbr = node_mbr;
     }
     bool overlap(const Point &x, const Point &y)
     {
@@ -125,8 +130,7 @@ struct node
     }
 
     Node_type _type;
-    union
-    {
+    union {
         int _id;
         void *_ptr;
     };

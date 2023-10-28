@@ -1,13 +1,12 @@
 #ifndef _MBR_H_
 #define _MBR_H_
 
-#include <vector>
 #include <array>
 #include <limits>
 #include <string>
+#include <vector>
 
-struct mbr
-{
+struct mbr {
     using Point = std::array<double, 2>;
 
     mbr()
@@ -19,7 +18,8 @@ struct mbr
     mbr(double x_low, double x_high,
         double y_low, double y_high) : _x_low(x_low), _x_high(x_high),
                                        _y_low(y_low), _y_high(y_high) {}
-    mbr(std::vector<Point> &polygon) {
+    mbr(std::vector<Point> &polygon)
+    {
         set_mbr(polygon);
     }
 
@@ -27,8 +27,7 @@ struct mbr
     {
         _x_low = _y_low = std::numeric_limits<double>::max();
         _x_high = _y_high = std::numeric_limits<double>::lowest();
-        for (auto p : polygon)
-        {
+        for (auto p : polygon) {
             _x_low = std::min(p[0], _x_low);
             _x_high = std::max(p[0], _x_high);
             _y_low = std::min(p[1], _y_low);
